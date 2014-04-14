@@ -279,6 +279,18 @@ public class SynchronousCommandProcessingService implements CommandProcessingSer
             } else {
                 throw new UnsupportedCommandException(wrapper.commandName());
             }
+        } else if (wrapper.isSmsGatewayResource()) {
+            if (wrapper.isCreate()) {
+                handler = this.applicationContext.getBean("createSmsGatewayCommandHandler", NewCommandSourceHandler.class);
+            } else if (wrapper.isUpdate()) {
+                handler = this.applicationContext.getBean("updateSmsGatewayCommandHandler", NewCommandSourceHandler.class);
+            } else if (wrapper.isDelete()) {
+                handler = this.applicationContext.getBean("deleteSmsGatewayCommandHandler", NewCommandSourceHandler.class);
+            } else if (wrapper.isSmsGatewayTest()) {
+                handler = this.applicationContext.getBean("testSmsGatewayCommandHandler", NewCommandSourceHandler.class);
+            } else {
+                throw new UnsupportedCommandException(wrapper.commandName());
+            }
         } else if (wrapper.isCurrencyResource()) {
             handler = this.applicationContext.getBean("updateCurrencyCommandHandler", NewCommandSourceHandler.class);
         } else if (wrapper.isFundResource()) {
@@ -452,19 +464,19 @@ public class SynchronousCommandProcessingService implements CommandProcessingSer
             } else if (wrapper.isSavingsAccountInterestPosting()) {
                 handler = this.applicationContext.getBean("postInterestSavingsAccountCommandHandler", NewCommandSourceHandler.class);
             } /*
-               * else if (wrapper.isSavingsAccountApplyAnnualFee()) { handler =
-               * this.applicationContext.getBean(
-               * "applyAnnualFeeSavingsAccountCommandHandler",
-               * NewCommandSourceHandler.class); }
-               */else if (wrapper.isSavingsAccountUndoTransaction()) {
-                handler = this.applicationContext.getBean("undoTransactionSavingsAccountCommandHandler", NewCommandSourceHandler.class);
-            } else if (wrapper.isAdjustSavingsAccountTransaction()) {
-                handler = this.applicationContext.getBean("savingsTransactionAdjustmentCommandHandler", NewCommandSourceHandler.class);
-            } else if (wrapper.isSavingsAccountClose()) {
-                handler = this.applicationContext.getBean("closeSavingsAccountCommandHandler", NewCommandSourceHandler.class);
-            } else {
-                throw new UnsupportedCommandException(wrapper.commandName());
-            }
+             * else if (wrapper.isSavingsAccountApplyAnnualFee()) { handler =
+             * this.applicationContext.getBean(
+             * "applyAnnualFeeSavingsAccountCommandHandler",
+             * NewCommandSourceHandler.class); }
+             */else if (wrapper.isSavingsAccountUndoTransaction()) {
+                 handler = this.applicationContext.getBean("undoTransactionSavingsAccountCommandHandler", NewCommandSourceHandler.class);
+             } else if (wrapper.isAdjustSavingsAccountTransaction()) {
+                 handler = this.applicationContext.getBean("savingsTransactionAdjustmentCommandHandler", NewCommandSourceHandler.class);
+             } else if (wrapper.isSavingsAccountClose()) {
+                 handler = this.applicationContext.getBean("closeSavingsAccountCommandHandler", NewCommandSourceHandler.class);
+             } else {
+                 throw new UnsupportedCommandException(wrapper.commandName());
+             }
         } else if (wrapper.isSavingsAccountChargeResource()) {
             if (wrapper.isAddSavingsAccountCharge()) {
                 handler = this.applicationContext.getBean("addSavingsAccountChargeCommandHandler", NewCommandSourceHandler.class);
