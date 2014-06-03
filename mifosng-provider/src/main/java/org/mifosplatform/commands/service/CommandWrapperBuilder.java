@@ -6,7 +6,6 @@
 package org.mifosplatform.commands.service;
 
 import org.mifosplatform.commands.domain.CommandWrapper;
-import org.mifosplatform.portfolio.savings.DepositAccountType;
 
 public class CommandWrapperBuilder {
 
@@ -24,13 +23,11 @@ public class CommandWrapperBuilder {
     private String transactionId;
     private Long productId;
     private Long templateId;
-    private Long interestRatechartId;
-    private DepositAccountType depositAccountType;
 
     public CommandWrapper build() {
         return new CommandWrapper(this.officeId, this.groupId, this.clientId, this.loanId, this.savingsId, this.actionName,
                 this.entityName, this.entityId, this.subentityId, this.href, this.json, this.transactionId, this.productId,
-                this.templateId, this.interestRatechartId, this.depositAccountType);
+                this.templateId);
     }
 
     public CommandWrapperBuilder withLoanId(final Long withLoanId) {
@@ -1217,7 +1214,7 @@ public class CommandWrapperBuilder {
         this.actionName = "CREATE";
         this.entityName = "CHARTSLAB";
         this.entityId = null;
-        this.interestRatechartId = chartId;
+        this.subentityId = chartId; //refer to chart id 
         this.href = "/interestratechart/" + chartId + "/chartdetails/template";
         return this;
     }
@@ -1226,7 +1223,7 @@ public class CommandWrapperBuilder {
         this.actionName = "UPDATE";
         this.entityName = "CHARTSLAB";
         this.entityId = chartSlabId;
-        this.interestRatechartId = chartId;
+        this.subentityId = chartId;//refers parent chart
         this.href = "/interestratechart/" + chartId + "/chartdetails/" + chartSlabId;
         return this;
     }
@@ -1235,7 +1232,7 @@ public class CommandWrapperBuilder {
         this.actionName = "DELETE";
         this.entityName = "CHARTSLAB";
         this.entityId = chartSlabId;
-        this.interestRatechartId = chartId;
+        this.subentityId = chartId;//refers parent chart
         this.href = "/interestratechart/" + chartId + "/chartdetails/" + chartSlabId;
         return this;
     }
@@ -1730,7 +1727,6 @@ public class CommandWrapperBuilder {
         this.actionName = "CREATE";
         this.entityName = "FIXEDDEPOSITACCOUNT";
         this.entityId = null;
-        this.depositAccountType = DepositAccountType.FIXED_DEPOSIT;
         this.href = "/fixeddepositaccounts/template";
         return this;
     }
@@ -1739,7 +1735,6 @@ public class CommandWrapperBuilder {
         this.actionName = "UPDATE";
         this.entityName = "FIXEDDEPOSITACCOUNT";
         this.entityId = accountId;
-        this.depositAccountType = DepositAccountType.FIXED_DEPOSIT;
         this.href = "/fixeddepositaccounts/" + accountId;
         return this;
     }
@@ -1748,7 +1743,6 @@ public class CommandWrapperBuilder {
         this.actionName = "DELETE";
         this.entityName = "FIXEDDEPOSITACCOUNT";
         this.entityId = accountId;
-        this.depositAccountType = DepositAccountType.FIXED_DEPOSIT;
         this.href = "/fixeddepositaccounts/" + accountId;
         return this;
     }
@@ -1758,7 +1752,6 @@ public class CommandWrapperBuilder {
         this.entityName = "FIXEDDEPOSITACCOUNT";
         this.entityId = accountId;
         this.savingsId = accountId;
-        this.depositAccountType = DepositAccountType.FIXED_DEPOSIT;
         this.href = "/fixeddepositaccounts/" + accountId + "?command=reject";
         return this;
     }
@@ -1768,7 +1761,6 @@ public class CommandWrapperBuilder {
         this.entityName = "FIXEDDEPOSITACCOUNT";
         this.entityId = accountId;
         this.savingsId = accountId;
-        this.depositAccountType = DepositAccountType.FIXED_DEPOSIT;
         this.href = "/fixeddepositaccounts/" + accountId + "?command=withdrawnByApplicant";
         return this;
     }
@@ -1778,7 +1770,6 @@ public class CommandWrapperBuilder {
         this.entityName = "FIXEDDEPOSITACCOUNT";
         this.entityId = accountId;
         this.savingsId = accountId;
-        this.depositAccountType = DepositAccountType.FIXED_DEPOSIT;
         this.href = "/fixeddepositaccounts/" + accountId + "?command=approve";
         return this;
     }
@@ -1788,7 +1779,6 @@ public class CommandWrapperBuilder {
         this.entityName = "FIXEDDEPOSITACCOUNT";
         this.entityId = accountId;
         this.savingsId = accountId;
-        this.depositAccountType = DepositAccountType.FIXED_DEPOSIT;
         this.href = "/fixeddepositaccounts/" + accountId + "?command=undoapproval";
         return this;
     }
@@ -1798,7 +1788,6 @@ public class CommandWrapperBuilder {
         this.entityName = "FIXEDDEPOSITACCOUNT";
         this.savingsId = accountId;
         this.entityId = accountId;
-        this.depositAccountType = DepositAccountType.FIXED_DEPOSIT;
         this.href = "/fixeddepositaccounts/" + accountId + "?command=activate";
         return this;
     }
@@ -1808,7 +1797,6 @@ public class CommandWrapperBuilder {
         this.entityName = "FIXEDDEPOSITACCOUNT";
         this.entityId = accountId;
         this.savingsId = accountId;
-        this.depositAccountType = DepositAccountType.FIXED_DEPOSIT;
         this.href = "/fixeddepositaccounts/" + accountId + "?command=close";
         return this;
     }
@@ -1818,7 +1806,6 @@ public class CommandWrapperBuilder {
         this.entityName = "FIXEDDEPOSITACCOUNT";
         this.entityId = accountId;
         this.savingsId = accountId;
-        this.depositAccountType = DepositAccountType.FIXED_DEPOSIT;
         this.href = "/fixeddepositaccounts/" + accountId + "?command=prematureClose";
         return this;
     }
@@ -1828,7 +1815,6 @@ public class CommandWrapperBuilder {
         this.entityName = "FIXEDDEPOSITACCOUNT";
         this.savingsId = accountId;
         this.entityId = accountId;
-        this.depositAccountType = DepositAccountType.FIXED_DEPOSIT;
         this.href = "/fixeddepositaccounts/" + accountId + "?command=calculateInterest";
         return this;
     }
@@ -1838,7 +1824,6 @@ public class CommandWrapperBuilder {
         this.entityName = "FIXEDDEPOSITACCOUNT";
         this.savingsId = accountId;
         this.entityId = accountId;
-        this.depositAccountType = DepositAccountType.FIXED_DEPOSIT;
         this.href = "/fixeddepositaccounts/" + accountId + "?command=postInterest";
         return this;
     }
@@ -1847,7 +1832,6 @@ public class CommandWrapperBuilder {
         this.actionName = "DEPOSIT";
         this.entityName = "FIXEDDEPOSITACCOUNT";
         this.savingsId = accountId;
-        this.depositAccountType = DepositAccountType.FIXED_DEPOSIT;
         this.entityId = accountId;
         this.href = "/fixeddepositaccounts/" + accountId + "/transactions?command=deposit";
         return this;
@@ -1857,7 +1841,6 @@ public class CommandWrapperBuilder {
         this.actionName = "WITHDRAWAL";
         this.entityName = "FIXEDDEPOSITACCOUNT";
         this.savingsId = accountId;
-        this.depositAccountType = DepositAccountType.FIXED_DEPOSIT;
         this.entityId = accountId;
         this.href = "/fixeddepositaccounts/" + accountId + "/transactions?command=withdrawal";
         return this;
@@ -1867,7 +1850,6 @@ public class CommandWrapperBuilder {
         this.actionName = "CREATE";
         this.entityName = "RECURRINGDEPOSITACCOUNT";
         this.entityId = null;
-        this.depositAccountType = DepositAccountType.RECURRING_DEPOSIT;
         this.href = "/recurringdepositaccounts/template";
         return this;
     }
@@ -1876,7 +1858,6 @@ public class CommandWrapperBuilder {
         this.actionName = "UPDATE";
         this.entityName = "RECURRINGDEPOSITACCOUNT";
         this.entityId = accountId;
-        this.depositAccountType = DepositAccountType.RECURRING_DEPOSIT;
         this.href = "/recurringdepositaccounts/" + accountId;
         return this;
     }
@@ -1885,7 +1866,6 @@ public class CommandWrapperBuilder {
         this.actionName = "DEPOSIT";
         this.entityName = "RECURRINGDEPOSITACCOUNT";
         this.savingsId = accountId;
-        this.depositAccountType = DepositAccountType.RECURRING_DEPOSIT;
         this.entityId = accountId;
         this.href = "/recurringdepositaccounts/" + accountId + "/transactions?command=deposit";
         return this;
@@ -1895,7 +1875,6 @@ public class CommandWrapperBuilder {
         this.actionName = "WITHDRAWAL";
         this.entityName = "RECURRINGDEPOSITACCOUNT";
         this.savingsId = accountId;
-        this.depositAccountType = DepositAccountType.RECURRING_DEPOSIT;
         this.entityId = accountId;
         this.href = "/recurringdepositaccounts/" + accountId + "/transactions?command=withdrawal";
         return this;
@@ -1906,7 +1885,6 @@ public class CommandWrapperBuilder {
         this.entityName = "RECURRINGDEPOSITACCOUNT";
         this.savingsId = accountId;
         this.entityId = accountId;
-        this.depositAccountType = DepositAccountType.RECURRING_DEPOSIT;
         this.subentityId = transactionId;
         this.transactionId = transactionId.toString();
         this.href = "/recurringdepositaccounts/" + accountId + "/transactions/" + transactionId + "?command=modify";
@@ -1918,7 +1896,6 @@ public class CommandWrapperBuilder {
         this.entityName = "RECURRINGDEPOSITACCOUNT";
         this.savingsId = accountId;
         this.entityId = accountId;
-        this.depositAccountType = DepositAccountType.RECURRING_DEPOSIT;
         this.subentityId = transactionId;
         this.transactionId = transactionId.toString();
         this.href = "/recurringdepositaccounts/" + accountId + "/transactions/" + transactionId + "?command=undo";
@@ -1929,7 +1906,6 @@ public class CommandWrapperBuilder {
         this.actionName = "DELETE";
         this.entityName = "RECURRINGDEPOSITACCOUNT";
         this.entityId = accountId;
-        this.depositAccountType = DepositAccountType.RECURRING_DEPOSIT;
         this.href = "/recurringdepositaccounts/" + accountId;
         return this;
     }
@@ -1939,7 +1915,6 @@ public class CommandWrapperBuilder {
         this.entityName = "RECURRINGDEPOSITACCOUNT";
         this.entityId = accountId;
         this.savingsId = accountId;
-        this.depositAccountType = DepositAccountType.RECURRING_DEPOSIT;
         this.href = "/recurringdepositaccounts/" + accountId + "?command=reject";
         return this;
     }
@@ -1949,7 +1924,6 @@ public class CommandWrapperBuilder {
         this.entityName = "RECURRINGDEPOSITACCOUNT";
         this.entityId = accountId;
         this.savingsId = accountId;
-        this.depositAccountType = DepositAccountType.RECURRING_DEPOSIT;
         this.href = "/recurringdepositaccounts/" + accountId + "?command=withdrawnByApplicant";
         return this;
     }
@@ -1959,7 +1933,6 @@ public class CommandWrapperBuilder {
         this.entityName = "RECURRINGDEPOSITACCOUNT";
         this.entityId = accountId;
         this.savingsId = accountId;
-        this.depositAccountType = DepositAccountType.RECURRING_DEPOSIT;
         this.href = "/recurringdepositaccounts/" + accountId + "?command=approve";
         return this;
     }
@@ -1969,7 +1942,6 @@ public class CommandWrapperBuilder {
         this.entityName = "RECURRINGDEPOSITACCOUNT";
         this.entityId = accountId;
         this.savingsId = accountId;
-        this.depositAccountType = DepositAccountType.RECURRING_DEPOSIT;
         this.href = "/recurringdepositaccounts/" + accountId + "?command=undoapproval";
         return this;
     }
@@ -1979,7 +1951,6 @@ public class CommandWrapperBuilder {
         this.entityName = "RECURRINGDEPOSITACCOUNT";
         this.savingsId = accountId;
         this.entityId = accountId;
-        this.depositAccountType = DepositAccountType.RECURRING_DEPOSIT;
         this.href = "/recurringdepositaccounts/" + accountId + "?command=activate";
         return this;
     }
@@ -1989,7 +1960,6 @@ public class CommandWrapperBuilder {
         this.entityName = "RECURRINGDEPOSITACCOUNT";
         this.entityId = accountId;
         this.savingsId = accountId;
-        this.depositAccountType = DepositAccountType.RECURRING_DEPOSIT;
         this.href = "/recurringdepositaccounts/" + accountId + "?command=close";
         return this;
     }
@@ -1999,7 +1969,6 @@ public class CommandWrapperBuilder {
         this.entityName = "RECURRINGDEPOSITACCOUNT";
         this.entityId = accountId;
         this.savingsId = accountId;
-        this.depositAccountType = DepositAccountType.RECURRING_DEPOSIT;
         this.href = "/recurringdepositaccounts/" + accountId + "?command=prematureClose";
         return this;
     }
@@ -2009,7 +1978,6 @@ public class CommandWrapperBuilder {
         this.entityName = "RECURRINGDEPOSITACCOUNT";
         this.savingsId = accountId;
         this.entityId = accountId;
-        this.depositAccountType = DepositAccountType.RECURRING_DEPOSIT;
         this.href = "/recurringdepositaccounts/" + accountId + "?command=calculateInterest";
         return this;
     }
@@ -2019,7 +1987,6 @@ public class CommandWrapperBuilder {
         this.entityName = "RECURRINGDEPOSITACCOUNT";
         this.savingsId = accountId;
         this.entityId = accountId;
-        this.depositAccountType = DepositAccountType.RECURRING_DEPOSIT;
         this.href = "/recurringdepositaccounts/" + accountId + "?command=postInterest";
         return this;
     }
