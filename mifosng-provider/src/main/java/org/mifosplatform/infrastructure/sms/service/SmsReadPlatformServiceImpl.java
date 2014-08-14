@@ -45,7 +45,7 @@ public class SmsReadPlatformServiceImpl implements SmsReadPlatformService {
             sql.append("smo.staff_id as staffId, ");
             sql.append("smo.status_enum as statusId, ");
             sql.append("smo.mobile_no as mobileNo, ");
-            sql.append("smo.message as message ");
+            sql.append("smo.message as message, ");
             sql.append("smo.gatewayId as gatewayId ");
             sql.append("from sms_messages_outbound smo");
 

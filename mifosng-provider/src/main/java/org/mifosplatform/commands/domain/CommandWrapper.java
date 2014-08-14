@@ -24,7 +24,9 @@ public class CommandWrapper {
     private final String json;
     private final String transactionId;
     private final Long productId;
-    
+    private Long pgsClientId;
+	private Long serviceAccountId;
+	
     @SuppressWarnings("unused")
     private Long templateId;
 
@@ -106,7 +108,31 @@ public class CommandWrapper {
         this.productId = productId;
     }
 
-    public Long commandId() {
+    public CommandWrapper(Long officeId, Long groupId,
+			Long clientId, Long loanId, Long savingsId, String actionName,String entityName, Long entityId,
+			Long subentityId, String href, String json, String transactionId, Long productId, Long templateId,
+			Long pgsClientId, Long serviceAccountId) { 
+		this.officeId = officeId;
+		this.groupId = groupId;
+		this.clientId = clientId;
+		this.loanId = loanId;
+		this.savingsId = savingsId;
+		this.productId = productId;
+		this.actionName = actionName;
+		this.entityName = entityName;
+		this.entityId = entityId;
+		this.subentityId = subentityId;
+		this.href = href;
+		this.json = json;
+		this.transactionId = transactionId;
+		this.pgsClientId = pgsClientId;
+		this.serviceAccountId = serviceAccountId;
+		this.templateId = templateId;
+		this.taskPermissionName = null;
+		this.commandId = null;
+	}
+    
+	public Long commandId() {
         return this.commandId;
     }
 
@@ -193,6 +219,14 @@ public class CommandWrapper {
     public Long getProductId() {
         return this.productId;
     }
+    
+    public Long getPGSClientId() {
+        return this.pgsClientId;
+    }
+    
+    public Long getServiceAccountId() {
+        return this.serviceAccountId;
+    }
 
     public boolean isUpdate() {
         // permissions resource has special update which involves no resource.
@@ -236,6 +270,30 @@ public class CommandWrapper {
         return this.entityName.equalsIgnoreCase("CURRENCY");
     }
 
+    public boolean isCurrentAccountInformationResource() {
+        return this.entityName.equalsIgnoreCase("CURRENTACCOUNTINFORMATION");
+    }
+    
+    public boolean isServiceAccountStatusHistoryResource() {
+        return this.entityName.equalsIgnoreCase("SERVICEACCOUNTSTATUSHISTORY");
+    }
+    
+    public boolean isUsageRecordResource() {
+        return this.entityName.equalsIgnoreCase("USAGERECORD");
+    }
+    
+    public boolean isServiceAccountResource() {
+        return this.entityName.equalsIgnoreCase("SERVICEACCOUNT");
+    }
+    
+    public boolean isServiceOfferingResource() {
+        return this.entityName.equalsIgnoreCase("SERVICEOFFERING");
+    }
+    
+    public boolean isTransactionRecordResource() {
+        return this.entityName.equalsIgnoreCase("TRANSACTIONRECORD");
+    }
+    
     public boolean isSmsResource() {
         return this.entityName.equalsIgnoreCase("SMS");
     }
@@ -311,6 +369,14 @@ public class CommandWrapper {
     public boolean isClientActivation() {
         return this.actionName.equalsIgnoreCase("ACTIVATE") && this.entityName.equalsIgnoreCase("CLIENT");
     }
+    
+    public boolean isPGSClientResource() {
+        return this.entityName.equalsIgnoreCase("PGSCLIENT");
+    }
+
+    public boolean isPGSClientActivation() {
+        return this.actionName.equalsIgnoreCase("ACTIVATE") && this.entityName.equalsIgnoreCase("PGSCLIENT");
+    }
 
     public boolean isGroupActivation() {
         return this.actionName.equalsIgnoreCase("ACTIVATE") && this.entityName.equalsIgnoreCase("GROUP");
@@ -334,6 +400,14 @@ public class CommandWrapper {
 
     public boolean isClientNoteResource() {
         return this.entityName.equals("CLIENTNOTE");
+    }
+
+    public boolean isPGSClientIdentifierResource() {
+        return this.entityName.equals("PGSCLIENTIDENTIFIER");
+    }
+
+    public boolean isPGSClientNoteResource() {
+        return this.entityName.equals("PGSCLIENTNOTE");
     }
 
     public boolean isLoanResource() {
@@ -629,6 +703,14 @@ public class CommandWrapper {
     public boolean isDisassociateClients() {
         return this.actionName.equalsIgnoreCase("DISASSOCIATECLIENTS");
     }
+    
+    public boolean isAssociatePGSClients() {
+        return this.actionName.equalsIgnoreCase("ASSOCIATECLIENTS");
+    }
+
+    public boolean isDisassociatePGSClients() {
+        return this.actionName.equalsIgnoreCase("DISASSOCIATECLIENTS");
+    }
 
     public boolean isXBRLMappingResource() {
         return this.entityName.equalsIgnoreCase("XBRLMAPPING");
@@ -648,6 +730,10 @@ public class CommandWrapper {
 
     public boolean isClientUnassignStaff() {
         return this.actionName.equalsIgnoreCase("UNASSIGNSTAFF") && this.entityName.equalsIgnoreCase("CLIENT");
+    }
+    
+    public boolean isPGSClientUnassignStaff() {
+        return this.actionName.equalsIgnoreCase("UNASSIGNSTAFF") && this.entityName.equalsIgnoreCase("PGSCLIENT");
     }
 
     public boolean isAssignGroupRole() {
@@ -695,6 +781,42 @@ public class CommandWrapper {
     }
 
     public boolean isUpdateClientSavingsAccount() {
+        return this.actionName.equalsIgnoreCase("UPDATESAVINGSACCOUNT") && this.entityName.equalsIgnoreCase("CLIENT");
+    }
+    
+    public boolean isTransferPGSClientsBetweenGroups() {
+        return this.entityName.equalsIgnoreCase("GROUP") && this.actionName.equalsIgnoreCase("TRANSFERCLIENTS");
+    }
+
+    public boolean isPGSClientAssignStaff() {
+        return this.actionName.equalsIgnoreCase("ASSIGNSTAFF") && this.entityName.equalsIgnoreCase("PGSCLIENT");
+    }
+
+    public boolean isPGSClientClose() {
+        return this.actionName.equalsIgnoreCase("CLOSE") && this.entityName.equalsIgnoreCase("PGSCLIENT");
+    }
+
+    public boolean isProposePGSClientTransfer() {
+        return this.actionName.equalsIgnoreCase("PROPOSETRANSFER") && this.entityName.equalsIgnoreCase("CLIENT");
+    }
+
+    public boolean isProposeAndAcceptPGSClientTransfer() {
+        return this.actionName.equalsIgnoreCase("PROPOSEANDACCEPTTRANSFER") && this.entityName.equalsIgnoreCase("CLIENT");
+    }
+
+    public boolean isWithdrawPGSClientTransfer() {
+        return this.actionName.equalsIgnoreCase("WITHDRAWTRANSFER") && this.entityName.equalsIgnoreCase("CLIENT");
+    }
+
+    public boolean isAcceptPGSClientTransfer() {
+        return this.actionName.equalsIgnoreCase("ACCEPTTRANSFER") && this.entityName.equalsIgnoreCase("CLIENT");
+    }
+
+    public boolean isRejectPGSClientTransfer() {
+        return this.actionName.equalsIgnoreCase("REJECTTRANSFER") && this.entityName.equalsIgnoreCase("CLIENT");
+    }
+
+    public boolean isUpdatePGSClientSavingsAccount() {
         return this.actionName.equalsIgnoreCase("UPDATESAVINGSACCOUNT") && this.entityName.equalsIgnoreCase("CLIENT");
     }
 

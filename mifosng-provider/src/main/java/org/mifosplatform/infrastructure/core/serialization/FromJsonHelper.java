@@ -9,6 +9,7 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -224,4 +225,9 @@ public class FromJsonHelper {
     public String extractMonthDayFormatParameter(final JsonObject element) {
         return this.helperDelegator.extractMonthDayFormatParameter(element);
     }
+
+	public Double extractDoubleNamed(String parameterName, JsonElement element) {
+		
+		return this.helperDelegator.extractDoubleFormatParameter(parameterName, element, new HashSet<String>());
+	}
 }

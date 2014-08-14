@@ -7,6 +7,8 @@ package org.mifosplatform.commands.service;
 
 import org.mifosplatform.commands.domain.CommandWrapper;
 
+import com.sun.istack.FinalArrayList;
+
 public class CommandWrapperBuilder {
 
     private Long officeId;
@@ -23,11 +25,13 @@ public class CommandWrapperBuilder {
     private String transactionId;
     private Long productId;
     private Long templateId;
-
+	private Long pgsClientId;
+	private Long serviceAccountId;
+	
     public CommandWrapper build() {
         return new CommandWrapper(this.officeId, this.groupId, this.clientId, this.loanId, this.savingsId, this.actionName,
                 this.entityName, this.entityId, this.subentityId, this.href, this.json, this.transactionId, this.productId,
-                this.templateId);
+                this.templateId, this.pgsClientId, this.serviceAccountId);
     }
 
     public CommandWrapperBuilder withLoanId(final Long withLoanId) {
@@ -42,6 +46,11 @@ public class CommandWrapperBuilder {
 
     public CommandWrapperBuilder withClientId(final Long withClientId) {
         this.clientId = withClientId;
+        return this;
+    }
+    
+    public CommandWrapperBuilder withPGSClientId(final Long withPGSClientId) {
+        this.pgsClientId = withPGSClientId;
         return this;
     }
 
@@ -255,6 +264,163 @@ public class CommandWrapperBuilder {
         return this;
     }
 
+    public CommandWrapperBuilder createCurrentAccountInformation(final Long serviceAccountId) {
+        this.actionName = "CREATE";
+        this.entityName = "CURRENTACCOUNTINFORMATION";
+        this.entityId = null;
+        this.serviceAccountId = serviceAccountId;
+        this.href = "serviceaccount/" + serviceAccountId + "/currentaccountinformation/";
+        return this;
+    }
+
+    public CommandWrapperBuilder updateCurrentAccountInformation(final Long serviceAccountId, final Long resourceId) {
+        this.actionName = "UPDATE";
+        this.entityName = "CURRENTACCOUNTINFORMATION";
+        this.entityId = resourceId;
+        this.serviceAccountId = serviceAccountId;
+        this.href = "serviceaccount/" + serviceAccountId + "/currentaccountinformation/" + resourceId;
+        return this;
+    }
+
+    public CommandWrapperBuilder deleteCurrentAccountInformation(final Long serviceAccountId, final Long resourceId) {
+        this.actionName = "DELETE";
+        this.entityName = "CURRENTACCOUNTINFORMATION";
+        this.entityId = resourceId;
+        this.serviceAccountId = serviceAccountId;
+        this.href = "serviceaccount/" + serviceAccountId + "/currentaccountinformation/" + resourceId;
+        return this;
+    }
+    
+    public CommandWrapperBuilder createTransactionRecord(final Long serviceAccountId) {
+        this.actionName = "CREATE";
+        this.entityName = "TRANSACTIONRECORD";
+        this.entityId = null;
+        this.serviceAccountId = serviceAccountId;
+        this.href = "serviceaccount/"  + serviceAccountId +"/transactionrecord";
+        return this;
+    }
+
+    public CommandWrapperBuilder updateTransactionRecord(final Long serviceAccountId, final Long resourceId) {
+        this.actionName = "UPDATE";
+        this.entityName = "TRANSACTIONRECORD";
+        this.entityId = resourceId;
+        this.serviceAccountId = serviceAccountId;
+        this.href = "serviceaccount/"  + serviceAccountId + "/transactionrecord/" + resourceId;
+        return this;
+    }
+
+    public CommandWrapperBuilder deleteTransactionRecord(final Long serviceAccountId, final Long resourceId) {
+        this.actionName = "DELETE";
+        this.entityName = "TRANSACTIONRECORD";
+        this.entityId = resourceId;
+        this.serviceAccountId = serviceAccountId;
+        this.href = "serviceaccount/"  + serviceAccountId + "/transactionrecord/" + resourceId;
+        return this;
+    }
+    
+    public CommandWrapperBuilder createServiceAccountStatusHistory(final Long serviceAccountId) {
+        this.actionName = "CREATE";
+        this.entityName = "SERVICEACCOUNTSTATUSHISTORY";
+        this.entityId = null;
+        this.serviceAccountId = serviceAccountId;
+        this.href = "serviceaccount/" + serviceAccountId + "/serviceaccountstatushistory/";
+        return this;
+    }
+
+    public CommandWrapperBuilder updateServiceAccountStatusHistory(final Long serviceAccountId, final Long resourceId) {
+        this.actionName = "UPDATE";
+        this.entityName = "SERVICEACCOUNTSTATUSHISTORY";
+        this.serviceAccountId = serviceAccountId;
+        this.entityId = resourceId;
+        this.href = "serviceaccount/" + serviceAccountId +"/serviceaccountstatushistory/" + resourceId;
+        return this;
+    }
+
+    public CommandWrapperBuilder deleteServiceAccountStatusHistory(final Long serviceAccountId, final Long resourceId) {
+        this.actionName = "DELETE";
+        this.entityName = "SERVICEACCOUNTSTATUSHISTORY";
+        this.serviceAccountId = serviceAccountId;
+        this.entityId = resourceId;
+        this.href = "serviceaccount/" + serviceAccountId +"/serviceaccountstatushistory/" + resourceId;
+        return this;
+    }
+    
+    public CommandWrapperBuilder createUsageRecord(final Long serviceAccountId) {
+        this.actionName = "CREATE";
+        this.entityName = "USAGERECORD";
+        this.serviceAccountId = serviceAccountId;
+        this.href = "serviceaccount/" + serviceAccountId + "/usagerecord";
+        return this;
+    }
+
+    public CommandWrapperBuilder updateUsageRecord(final Long serviceAccountId, final Long resourceId) {
+        this.actionName = "UPDATE";
+        this.entityName = "USAGERECORD";
+        this.serviceAccountId = serviceAccountId;
+        this.entityId = resourceId;
+        this.href = "serviceaccount/"  + serviceAccountId + "/usagerecord/" + resourceId;
+        return this;
+    }
+
+    public CommandWrapperBuilder deleteUsageRecord(final Long serviceAccountId, final Long resourceId) {
+        this.actionName = "DELETE";
+        this.entityName = "USAGERECORD";
+        this.serviceAccountId = serviceAccountId;
+        this.entityId = resourceId;
+        this.href = "serviceaccount/"  + serviceAccountId + "/usagerecord/" + resourceId;
+        return this;
+    }
+    
+    public CommandWrapperBuilder createServiceAccount() {
+        this.actionName = "CREATE";
+        this.entityName = "SERVICEACCOUNT";
+        this.entityId = null;
+        this.href = "/serviceaccount/template";
+        return this;
+    }
+
+    public CommandWrapperBuilder updateServiceAccount(final Long resourceId) {
+        this.actionName = "UPDATE";
+        this.entityName = "SERVICEACCOUNT";
+        this.entityId = resourceId;
+        this.href = "/serviceaccount/" + resourceId;
+        return this;
+    }
+
+    public CommandWrapperBuilder deleteServiceAccount(final Long resourceId) {
+        this.actionName = "DELETE";
+        this.entityName = "SERVICEACCOUNT";
+        this.entityId = resourceId;
+        this.href = "/serviceaccount/" + resourceId;
+        return this;
+    }
+    public CommandWrapperBuilder createServiceOffering(final Long serviceAccountId) {
+        this.actionName = "CREATE";
+        this.entityName = "SERVICEOFFERING";
+        this.entityId = null;
+        this.serviceAccountId = serviceAccountId;
+        this.href = "serviceaccount/" + serviceAccountId + "/serviceoffering/";
+        return this;
+    }
+
+    public CommandWrapperBuilder updateServiceOffering(final Long serviceAccountId, final Long resourceId) {
+        this.actionName = "UPDATE";
+        this.entityName = "SERVICEOFFERING";
+        this.entityId = resourceId;
+        this.serviceAccountId = serviceAccountId;
+        this.href = "serviceaccount/" + serviceAccountId + "/serviceoffering/" + resourceId;
+        return this;
+    }
+
+    public CommandWrapperBuilder deleteServiceOffering(final Long serviceAccountId, final Long resourceId) {
+        this.actionName = "DELETE";
+        this.entityName = "SERVICEOFFERING";
+        this.entityId = resourceId;
+        this.serviceAccountId = serviceAccountId;
+        this.href = "serviceaccount/" + serviceAccountId + "/serviceoffering/" + resourceId;
+        return this;
+    }
+    
     public CommandWrapperBuilder createSms() {
         this.actionName = "CREATE";
         this.entityName = "SMS";
@@ -487,6 +653,122 @@ public class CommandWrapperBuilder {
         this.entityId = clientId;
         this.clientId = clientId;
         this.href = "/clients/" + clientId;
+        this.json = "{}";
+        return this;
+    }
+    
+    public CommandWrapperBuilder createPGSClientIdentifier(final Long pgsClientId) {
+        this.actionName = "CREATE";
+        this.entityName = "PGSCLIENTIDENTIFIER";
+        this.entityId = null;
+        this.pgsClientId = pgsClientId;
+        this.href = "/pgsclients/" + pgsClientId + "/identifiers/template";
+        return this;
+    }
+
+    public CommandWrapperBuilder updatePGSClientIdentifier(final Long pgsClientId, final Long pgsClientIdentifierId) {
+        this.actionName = "UPDATE";
+        this.entityName = "PGSCLIENTIDENTIFIER";
+        this.entityId = pgsClientIdentifierId;
+        this.pgsClientId = pgsClientId;
+        this.href = "/pgsclients/" + pgsClientId + "/identifiers/" + pgsClientIdentifierId;
+        return this;
+    }
+
+    public CommandWrapperBuilder deletePGSClientIdentifier(final Long pgsClientId, final Long pgsClientIdentifierId) {
+        this.actionName = "DELETE";
+        this.entityName = "PGSCLIENTIDENTIFIER";
+        this.entityId = pgsClientIdentifierId;
+        this.pgsClientId = pgsClientId;
+        this.href = "/pgsclients/" + pgsClientId + "/identifiers/" + pgsClientIdentifierId;
+        return this;
+    }
+
+    public CommandWrapperBuilder createPGSClient() {
+        this.actionName = "CREATE";
+        this.entityName = "PGSCLIENT";
+        this.href = "/pgsclients/template";
+        return this;
+    }
+
+    public CommandWrapperBuilder activatePGSClient(final Long pgsClientId) {
+        this.actionName = "ACTIVATE";
+        this.entityName = "PGSCLIENT";
+        this.entityId = pgsClientId;
+        this.pgsClientId = pgsClientId;
+        this.href = "/pgsclients/" + pgsClientId + "?command=activate&template=true";
+        return this;
+    }
+
+    public CommandWrapperBuilder closePGSClient(final Long pgsClientId) {
+        this.actionName = "CLOSE";
+        this.entityName = "PGSCLIENT";
+        this.entityId = pgsClientId;
+        this.pgsClientId = pgsClientId;
+        this.href = "/pgsclients/" + pgsClientId + "?command=close&template=true";
+        return this;
+    }
+
+    public CommandWrapperBuilder proposePGSClientTransfer(final Long pgsClientId) {
+        this.actionName = "PROPOSETRANSFER";
+        this.entityName = "PGSCLIENT";
+        this.entityId = pgsClientId;
+        this.pgsClientId = pgsClientId;
+        this.href = "/pgsClientId/" + pgsClientId + "?command=proposeTransfer";
+        return this;
+    }
+
+    public CommandWrapperBuilder proposeAndAcceptPGSClientTransfer(final Long pgsClientId) {
+        this.actionName = "PROPOSEANDACCEPTTRANSFER";
+        this.entityName = "PGSCLIENT";
+        this.entityId = pgsClientId;
+        this.pgsClientId = pgsClientId;
+        this.href = "/pgsClientId/" + pgsClientId + "?command=proposeAndAcceptTransfer";
+        return this;
+    }
+
+    public CommandWrapperBuilder withdrawPGSClientTransferRequest(final Long pgsClientId) {
+        this.actionName = "WITHDRAWTRANSFER";
+        this.entityName = "PGSCLIENT";
+        this.entityId = pgsClientId;
+        this.pgsClientId = pgsClientId;
+        this.href = "/pgsClientId/" + pgsClientId + "?command=withdrawTransfer";
+        return this;
+    }
+
+    public CommandWrapperBuilder acceptPGSClientTransfer(final Long pgsClientId) {
+        this.actionName = "ACCEPTTRANSFER";
+        this.entityName = "PGSCLIENT";
+        this.entityId = pgsClientId;
+        this.pgsClientId = pgsClientId;
+        this.href = "/pgsClientId/" + pgsClientId + "?command=acceptTransfer";
+        return this;
+    }
+
+    public CommandWrapperBuilder rejectPGSClientTransfer(final Long pgsClientId) {
+        this.actionName = "REJECTTRANSFER";
+        this.entityName = "PGSCLIENT";
+        this.entityId = pgsClientId;
+        this.pgsClientId = pgsClientId;
+        this.href = "/pgsClientId/" + pgsClientId + "?command=rejectTransfer";
+        return this;
+    }
+
+    public CommandWrapperBuilder updatePGSClient(final Long pgsClientId) {
+        this.actionName = "UPDATE";
+        this.entityName = "PGSCLIENT";
+        this.entityId = pgsClientId;
+        this.pgsClientId = pgsClientId;
+        this.href = "/pgsclients/" + pgsClientId;
+        return this;
+    }
+
+    public CommandWrapperBuilder deletePGSClient(final Long pgsClientId) {
+        this.actionName = "DELETE";
+        this.entityName = "PGSCLIENT";
+        this.entityId = pgsClientId;
+        this.pgsClientId = pgsClientId;
+        this.href = "/pgsclients/" + pgsClientId;
         this.json = "{}";
         return this;
     }
@@ -1594,6 +1876,15 @@ public class CommandWrapperBuilder {
         this.href = "/clients/" + clientId + "?command=unassignStaff";
         return this;
     }
+    
+    public CommandWrapperBuilder unassignPGSClientStaff(final Long pgsClientId) {
+        this.actionName = "UNASSIGNSTAFF";
+        this.entityName = "CLIENT";
+        this.entityId = pgsClientId;
+        this.pgsClientId = pgsClientId;
+        this.href = "/pgsclients/" + pgsClientId + "?command=unassignStaff";
+        return this;
+    }
 
     public CommandWrapperBuilder createTemplate() {
         this.actionName = "CREATE";
@@ -1637,6 +1928,24 @@ public class CommandWrapperBuilder {
         return this;
     }
 
+    public CommandWrapperBuilder assignPGSClientStaff(final Long pgsClientId) {
+        this.actionName = "ASSIGNSTAFF";
+        this.entityName = "CLIENT";
+        this.entityId = pgsClientId;
+        this.pgsClientId = pgsClientId;
+        this.href = "/pgsclients/" + pgsClientId + "?command=assignStaff";
+        return this;
+    }
+
+    public CommandWrapperBuilder updatePGSClientSavingsAccount(final Long pgsClientId) {
+        this.actionName = "UPDATESAVINGSACCOUNT";
+        this.entityName = "PGSCLIENT";
+        this.entityId = pgsClientId;
+        this.pgsClientId = pgsClientId;
+        this.href = "/pgsclients/" + pgsClientId + "?command=updateSavingsAccount";
+        return this;
+    }
+    
     public CommandWrapperBuilder createProductMix(final Long productId) {
         this.actionName = "CREATE";
         this.entityName = "PRODUCTMIX";
