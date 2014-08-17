@@ -33,7 +33,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-//TODO Implement this structure for all other ServiceAccount relations
 @Path("serviceaccount/{serviceAccountId}/usagerecord")
 @Consumes({ MediaType.APPLICATION_JSON })
 @Produces({ MediaType.APPLICATION_JSON })

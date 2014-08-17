@@ -31,7 +31,6 @@ public class UsageRecordApiConstants {
     		dateFormatParamName));
 
     // update parameters
-    // TODO decide if we want to allow an update to these
     public static final Set<String> UPDATE_REQUEST_DATA_PARAMETERS = new HashSet<String>(Arrays.asList(noOfUnitsParamName));
 
 }

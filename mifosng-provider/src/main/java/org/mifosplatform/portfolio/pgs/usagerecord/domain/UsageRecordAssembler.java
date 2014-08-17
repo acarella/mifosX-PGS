@@ -53,7 +53,6 @@ public class UsageRecordAssembler {
 
 		final ServiceAccount serviceAccount = this.serviceAccountRepository.findOne(serviceAccountId);
 
-		//TODO figure out how to work with dates
 		if (this.fromApiJsonHelper.parameterExists(UsageRecordApiConstants.dateParamName, element)) {
 			localdate = this.fromApiJsonHelper.extractLocalDateNamed(UsageRecordApiConstants.dateParamName, element);
 			if (localdate != null) {
@@ -73,7 +72,6 @@ public class UsageRecordAssembler {
 			metricType = this.fromApiJsonHelper.extractIntegerNamed(UsageRecordApiConstants.metricTypeParamName, element, Locale.getDefault());
 		}
 
-		//TODO figure out how to work with dates
 		if (this.fromApiJsonHelper.parameterExists(UsageRecordApiConstants.startDateParamName, element)) {
 			localdate = this.fromApiJsonHelper.extractLocalDateNamed(UsageRecordApiConstants.startDateParamName, element);
 			if (localdate != null) {
@@ -83,7 +81,6 @@ public class UsageRecordAssembler {
 			}
 		}
 
-		//TODO figure out how to work with dates
 		if (this.fromApiJsonHelper.parameterExists(UsageRecordApiConstants.endDateParamName, element)) {
 			localdate = this.fromApiJsonHelper.extractLocalDateNamed(UsageRecordApiConstants.endDateParamName, element);
 			if (localdate != null) {

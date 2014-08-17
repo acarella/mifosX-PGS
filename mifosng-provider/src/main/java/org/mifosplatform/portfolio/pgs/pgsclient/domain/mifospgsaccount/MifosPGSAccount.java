@@ -34,7 +34,8 @@ public class MifosPGSAccount {
 	private final String MIFOS_INSTANCE_AUTHORIZATION = "Basic bWlmb3M6cGFzc3dvcmQ=";
 	private final String MIFOS_INSTANCE_TENANT_ID = "default";
 	private String responseString;
-	
+	private String approveResponseString;
+	private String activateResponseString;
 	
 	private final static Logger logger = LoggerFactory.getLogger(MifosClient.class);
 	private URL obj;
@@ -163,6 +164,129 @@ public class MifosPGSAccount {
 		}
 		
 		return responseString;
+	}
+	
+public String approve(String savingsId) {
+	
+		//TODO apply DRY principles to this code!
+		
+		JsonObject jsonObj = new JsonObject();
+		jsonObj.addProperty("locale", locale);
+		jsonObj.addProperty("dateFormat", dateFormat);
+		jsonObj.addProperty("approvedOnDate", submittedOnDate);
+		
+		final String rawData = jsonObj.toString();
+		
+		try {
+			obj = new URL(MIFOS_INSTANCE_URL + "/" + savingsId + "?command=approve");
+			connection = (HttpURLConnection)obj.openConnection();
+			connection.setRequestMethod("POST");
+			connection.setRequestProperty( "Content-Type", CONTENT_TYPE );
+			//connection.setRequestProperty( "Content-Length", String.valueOf(rawData.length()));
+			connection.setRequestProperty( "X-Mifos-Platform-TenantId", MIFOS_INSTANCE_TENANT_ID);
+			connection.setRequestProperty( "Authorization", MIFOS_INSTANCE_AUTHORIZATION); // TODO make dynamic
+			connection.setDoOutput(true);
+
+			OutputStream os = connection.getOutputStream();
+			os.write(rawData.getBytes());
+ 
+			long responseCode = connection.getResponseCode();
+			String responseMessage = connection.getResponseMessage();
+			logger.info("\nHttpURLConnection results : ");
+			logger.info("Sending 'POST' request to URL : " + MIFOS_INSTANCE_URL + "/" + savingsId + "?command=approve");
+			logger.info("Raw data: " + rawData);
+			logger.info("Response Code : " + responseCode);
+			logger.info("Response Message : " + responseMessage);
+
+			if (responseCode == 200){
+				
+				BufferedReader in = new BufferedReader(
+						new InputStreamReader(connection.getInputStream()));
+				String inputLine;
+				StringBuffer response = new StringBuffer();
+	
+				while ((inputLine = in.readLine()) != null) {
+					response.append(inputLine);
+				}
+				in.close();
+				logger.info(response.toString());
+				
+				approveResponseString = response.toString();
+			} else {			
+				approveResponseString = responseMessage;
+			}
+		} catch (MalformedURLException e) {
+
+			throw new RuntimeException(e);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		responseString = "Approval: " + approveResponseString;
+		
+		return responseString;
+	}
+	
+	public String activate(String savingsId){
+		
+		JsonObject jsonObj = new JsonObject();
+		jsonObj.addProperty("locale", locale);
+		jsonObj.addProperty("dateFormat", dateFormat);
+		jsonObj.addProperty("activatedOnDate", submittedOnDate);
+		
+		final String rawData = jsonObj.toString();
+		
+		try {
+			obj = new URL(MIFOS_INSTANCE_URL + "/" + savingsId + "?command=activate");
+			connection = (HttpURLConnection)obj.openConnection();
+			connection.setRequestMethod("POST");
+			connection.setRequestProperty( "Content-Type", CONTENT_TYPE );
+			//connection.setRequestProperty( "Content-Length", String.valueOf(rawData.length()));
+			connection.setRequestProperty( "X-Mifos-Platform-TenantId", MIFOS_INSTANCE_TENANT_ID);
+			connection.setRequestProperty( "Authorization", MIFOS_INSTANCE_AUTHORIZATION); // TODO make dynamic
+			connection.setDoOutput(true);
+
+			OutputStream os = connection.getOutputStream();
+			os.write(rawData.getBytes());
+ 
+			long responseCode = connection.getResponseCode();
+			String responseMessage = connection.getResponseMessage();
+			logger.info("\nHttpURLConnection results : ");
+			logger.info("Sending 'POST' request to URL : " + MIFOS_INSTANCE_URL + "/" + savingsId + "?command=activate");
+			logger.info("Raw data: " + rawData);
+			logger.info("Response Code : " + responseCode);
+			logger.info("Response Message : " + responseMessage);
+
+			if (responseCode == 200){
+				
+				BufferedReader in = new BufferedReader(
+						new InputStreamReader(connection.getInputStream()));
+				String inputLine;
+				StringBuffer response = new StringBuffer();
+	
+				while ((inputLine = in.readLine()) != null) {
+					response.append(inputLine);
+				}
+				in.close();
+				logger.info(response.toString());
+				
+				activateResponseString = response.toString();
+			} else {			
+				activateResponseString = responseMessage;
+			}
+		} catch (MalformedURLException e) {
+
+			throw new RuntimeException(e);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		responseString = "Activation: " + activateResponseString;
+		
+		return responseString;
+		
 	}
 	
 	public void setProductId(long productId) {

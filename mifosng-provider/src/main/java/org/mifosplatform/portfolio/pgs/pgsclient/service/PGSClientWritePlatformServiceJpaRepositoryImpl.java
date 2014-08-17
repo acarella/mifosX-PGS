@@ -173,7 +173,8 @@ public class PGSClientWritePlatformServiceJpaRepositoryImpl implements PGSClient
     @Transactional
     @Override
     public CommandProcessingResult createClient(final JsonCommand command) {
-
+    	//TODO amidst all of the object creation and DB writes, there needs to be some messages 
+    	// returned if/when things go wrong
         try {
             final AppUser currentUser = this.context.authenticatedUser();
 
@@ -223,8 +224,8 @@ public class PGSClientWritePlatformServiceJpaRepositoryImpl implements PGSClient
             
             final Locale locale = command.extractLocale();
             final DateTimeFormatter fmt = DateTimeFormat.forPattern(command.dateFormat()).withLocale(locale);
-            
-            SimpleDateFormat sdfDate = new SimpleDateFormat("dd MMMM yyyy"); //TODO make this dynamic
+            //TODO make this dynamic
+            SimpleDateFormat sdfDate = new SimpleDateFormat("dd MMMM yyyy"); 
             final Date date = new Date();
             final String activationDate = sdfDate.format(date);
             
@@ -246,7 +247,7 @@ public class PGSClientWritePlatformServiceJpaRepositoryImpl implements PGSClient
     			newClient.updateMifosClientId(mifosPGSClientId);
     		
     		} else {
-    			// Alert user of issue 
+    			// TODO Alert user of issue 
     		}
             
     		this.clientRepository.save(newClient);
@@ -274,6 +275,9 @@ public class PGSClientWritePlatformServiceJpaRepositoryImpl implements PGSClient
 				
 				mifosPGSClientId = mifosResponseJSON.get("clientId").getAsLong();
 				long mifosPGSAccountId = mifosResponseJSON.get("savingsId").getAsLong();
+				//Now that we have the savingsId, we can approve and activate the new account
+				mifosPGSAccount.approve(mifosResponseJSON.get("savingsId").getAsString());
+				mifosPGSAccount.activate(mifosResponseJSON.get("savingsId").getAsString());
 				double mifosPGSAccountBalance = 0.0;
 				// Create new CurrentAccountInformation
 				CurrentAccountInformation currentAccountInformation = 
