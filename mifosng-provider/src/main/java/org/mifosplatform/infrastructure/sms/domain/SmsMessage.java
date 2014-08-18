@@ -20,6 +20,7 @@ import org.mifosplatform.infrastructure.sms.SmsApiConstants;
 import org.mifosplatform.organisation.staff.domain.Staff;
 import org.mifosplatform.portfolio.client.domain.Client;
 import org.mifosplatform.portfolio.group.domain.Group;
+import org.mifosplatform.portfolio.pgs.pgsclient.domain.PGSClient;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 @Entity
@@ -31,8 +32,8 @@ public class SmsMessage extends AbstractPersistable<Long> {
     private Group group;
 
     @ManyToOne
-    @JoinColumn(name = "client_id", nullable = true)
-    private Client client;
+    @JoinColumn(name = "pgs_client_id", nullable = true)
+    private PGSClient pgsClient;
 
     @ManyToOne
     @JoinColumn(name = "staff_id", nullable = true)
@@ -50,19 +51,18 @@ public class SmsMessage extends AbstractPersistable<Long> {
     @Column(name = "gatewayId", nullable = false)
     private Long gatewayId;
 
-    public static SmsMessage pendingSms(final Group group, final Client client, final Staff staff, final String message,
+    public static SmsMessage pendingSms(final PGSClient pgsClient, final Staff staff, final String message,
             final String mobileNo, final Long gatewayId) {
-        return new SmsMessage(group, client, staff, SmsMessageStatusType.PENDING, message, mobileNo, gatewayId);
+        return new SmsMessage(pgsClient, staff, SmsMessageStatusType.PENDING, message, mobileNo, gatewayId);
     }
 
     protected SmsMessage() {
         //
     }
 
-    private SmsMessage(final Group group, final Client client, final Staff staff, final SmsMessageStatusType statusType,
+    private SmsMessage(final PGSClient pgsClient, final Staff staff, final SmsMessageStatusType statusType,
             final String message, final String mobileNo, final Long gatewayId) {
-        this.group = group;
-        this.client = client;
+        this.pgsClient = pgsClient;
         this.staff = staff;
         this.statusType = statusType.getValue();
         this.mobileNo = mobileNo;

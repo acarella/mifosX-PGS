@@ -11,10 +11,8 @@ import org.mifosplatform.infrastructure.sms.SmsApiConstants;
 import org.mifosplatform.infrastructure.sms.exception.SmsNotFoundException;
 import org.mifosplatform.organisation.staff.domain.Staff;
 import org.mifosplatform.organisation.staff.domain.StaffRepositoryWrapper;
-import org.mifosplatform.portfolio.client.domain.Client;
-import org.mifosplatform.portfolio.client.domain.ClientRepositoryWrapper;
-import org.mifosplatform.portfolio.group.domain.Group;
-import org.mifosplatform.portfolio.group.domain.GroupRepositoryWrapper;
+import org.mifosplatform.portfolio.pgs.pgsclient.domain.PGSClient;
+import org.mifosplatform.portfolio.pgs.pgsclient.domain.PGSClientRepositoryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,18 +22,15 @@ import com.google.gson.JsonElement;
 public class SmsMessageAssembler {
 
     private final SmsMessageRepository smsMessageRepository;
-    private final GroupRepositoryWrapper groupRepository;
-    private final ClientRepositoryWrapper clientRepository;
+    private final PGSClientRepositoryWrapper pgsClientRepositoryWrapper;
     private final StaffRepositoryWrapper staffRepository;
     private final FromJsonHelper fromApiJsonHelper;
 
     @Autowired
-    public SmsMessageAssembler(final SmsMessageRepository smsMessageRepository, final GroupRepositoryWrapper groupRepositoryWrapper,
-            final ClientRepositoryWrapper clientRepository, final StaffRepositoryWrapper staffRepository,
-            final FromJsonHelper fromApiJsonHelper) {
+    public SmsMessageAssembler(final SmsMessageRepository smsMessageRepository, final PGSClientRepositoryWrapper pgsClientRepository, 
+    		final StaffRepositoryWrapper staffRepository, final FromJsonHelper fromApiJsonHelper) {
         this.smsMessageRepository = smsMessageRepository;
-        this.groupRepository = groupRepositoryWrapper;
-        this.clientRepository = clientRepository;
+        this.pgsClientRepositoryWrapper = pgsClientRepository;
         this.staffRepository = staffRepository;
         this.fromApiJsonHelper = fromApiJsonHelper;
     }
@@ -46,17 +41,11 @@ public class SmsMessageAssembler {
 
         String mobileNo = null;
 
-        Group group = null;
-        if (this.fromApiJsonHelper.parameterExists(SmsApiConstants.groupIdParamName, element)) {
-            final Long groupId = this.fromApiJsonHelper.extractLongNamed(SmsApiConstants.groupIdParamName, element);
-            group = this.groupRepository.findOneWithNotFoundDetection(groupId);
-        }
-
-        Client client = null;
+        PGSClient pgsClient = null;
         if (this.fromApiJsonHelper.parameterExists(SmsApiConstants.clientIdParamName, element)) {
             final Long clientId = this.fromApiJsonHelper.extractLongNamed(SmsApiConstants.clientIdParamName, element);
-            client = this.clientRepository.findOneWithNotFoundDetection(clientId);
-            mobileNo = client.mobileNo();
+            pgsClient = this.pgsClientRepositoryWrapper.findOneWithNotFoundDetection(clientId);
+            mobileNo = pgsClient.mobileNo();
         }
 
         Staff staff = null;
@@ -70,7 +59,7 @@ public class SmsMessageAssembler {
         
         final String message = this.fromApiJsonHelper.extractStringNamed(SmsApiConstants.messageParamName, element);
 
-        return SmsMessage.pendingSms(group, client, staff, message, mobileNo, gatewayId);
+        return SmsMessage.pendingSms(pgsClient, staff, message, mobileNo, gatewayId);
     }
 
     public SmsMessage assembleFromResourceId(final Long resourceId) {

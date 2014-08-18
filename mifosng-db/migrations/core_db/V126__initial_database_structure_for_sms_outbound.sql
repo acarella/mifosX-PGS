@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS `sms_messages_outbound`;
 CREATE TABLE `sms_messages_outbound` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `group_id` bigint(20) DEFAULT NULL,
-  `client_id` bigint(20) DEFAULT NULL,
+  `pgs_client_id` bigint(20) DEFAULT NULL,
   `staff_id` bigint(20) DEFAULT NULL,
   `status_enum` int(5) NOT NULL DEFAULT '100',
   `mobile_no` varchar(50) NOT NULL,

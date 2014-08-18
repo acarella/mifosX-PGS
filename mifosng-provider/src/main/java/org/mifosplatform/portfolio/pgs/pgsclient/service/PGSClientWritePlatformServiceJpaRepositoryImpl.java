@@ -26,6 +26,8 @@ import org.mifosplatform.infrastructure.core.data.CommandProcessingResult;
 import org.mifosplatform.infrastructure.core.data.CommandProcessingResultBuilder;
 import org.mifosplatform.infrastructure.core.exception.PlatformDataIntegrityException;
 import org.mifosplatform.infrastructure.security.service.PlatformSecurityContext;
+import org.mifosplatform.infrastructure.sms.domain.SmsMessage;
+import org.mifosplatform.infrastructure.sms.domain.SmsMessageRepository;
 import org.mifosplatform.organisation.office.domain.Office;
 import org.mifosplatform.organisation.office.domain.OfficeRepository;
 import org.mifosplatform.organisation.office.exception.OfficeNotFoundException;
@@ -93,6 +95,7 @@ public class PGSClientWritePlatformServiceJpaRepositoryImpl implements PGSClient
     private final CurrentAccountInformationRepository currentAccountInformationRepository;
     private final ServiceAccountRepository serviceAccountRepository;
     private final ServiceOfferingRepository serviceOfferingRepository;
+    private final SmsMessageRepository smsMessageRepository;
     private String mifosPGSClientResponse;
     private String mifosPGSAccountResponse;
     private long mifosPGSClientId;
@@ -105,7 +108,8 @@ public class PGSClientWritePlatformServiceJpaRepositoryImpl implements PGSClient
             final CodeValueRepositoryWrapper codeValueRepository,
             final SavingsAccountRepository savingsRepository, final SavingsProductRepository savingsProductRepository,
             final CommandProcessingService commandProcessingService, final CurrentAccountInformationRepository currentAccountInformationRepository,
-            final ServiceAccountRepository serviceAccountRepository, final ServiceOfferingRepository serviceOfferingRepository) {
+            final ServiceAccountRepository serviceAccountRepository, final ServiceOfferingRepository serviceOfferingRepository, 
+            final SmsMessageRepository smsMessageRepository) {
         this.context = context;
         this.clientRepository = clientRepository;
         this.officeRepository = officeRepository;
@@ -121,6 +125,7 @@ public class PGSClientWritePlatformServiceJpaRepositoryImpl implements PGSClient
         this.currentAccountInformationRepository = currentAccountInformationRepository;
         this.serviceAccountRepository = serviceAccountRepository;
         this.serviceOfferingRepository = serviceOfferingRepository;
+        this.smsMessageRepository = smsMessageRepository;
     }
 
     @Transactional
@@ -218,6 +223,8 @@ public class PGSClientWritePlatformServiceJpaRepositoryImpl implements PGSClient
                 if (savingsProduct == null) { throw new SavingsProductNotFoundException(savingsProductId); }
             }
             
+            String mobileNo = command.stringValueOfParameterNamed("mobileNo"); 
+            
             // Create new client in PGS backend
             final PGSClient newClient = PGSClient.createNew(currentUser, clientOffice, clientParentGroup, staff, 
             		savingsProduct, gender, command);
@@ -304,6 +311,15 @@ public class PGSClientWritePlatformServiceJpaRepositoryImpl implements PGSClient
             }
     		
             this.clientRepository.save(newClient);
+            
+            // TODO make this message dynamic
+            String message = "Hello " + firstName + " welcome to PayGoSol solar payments services. Your "
+            		+ "account number is " + newClient.getId().toString() + ".";
+            
+            // TODO make this gatewayId dynamic
+            long gatewayId = 1;
+            SmsMessage smsMessage = SmsMessage.pendingSms(newClient, staff, message, mobileNo, gatewayId);
+            this.smsMessageRepository.save(smsMessage);
             
             return new CommandProcessingResultBuilder() //
                     .withCommandId(command.commandId()) //

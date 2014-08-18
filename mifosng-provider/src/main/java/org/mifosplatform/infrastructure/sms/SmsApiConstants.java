@@ -20,7 +20,7 @@ public class SmsApiConstants {
     // request parameters
     public static final String idParamName = "id";
     public static final String groupIdParamName = "groupId";
-    public static final String clientIdParamName = "clientId";
+    public static final String clientIdParamName = "pgsClientId";
     public static final String staffIdParamName = "staffId";
     public static final String messageParamName = "message";
     public static final String gatewayIdParamName = "gatewayId";
@@ -28,8 +28,8 @@ public class SmsApiConstants {
     // response parameters
     public static final String statusParamName = "status";
 
-    public static final Set<String> CREATE_REQUEST_DATA_PARAMETERS = new HashSet<String>(Arrays.asList(localeParamName,
-            dateFormatParamName, groupIdParamName, clientIdParamName, staffIdParamName, messageParamName, gatewayIdParamName));
+    public static final Set<String> CREATE_REQUEST_DATA_PARAMETERS = new HashSet<String>(Arrays.asList(groupIdParamName, 
+    		clientIdParamName, staffIdParamName, messageParamName, gatewayIdParamName));
 
     public static final Set<String> UPDATE_REQUEST_DATA_PARAMETERS = new HashSet<String>(Arrays.asList(messageParamName));
 

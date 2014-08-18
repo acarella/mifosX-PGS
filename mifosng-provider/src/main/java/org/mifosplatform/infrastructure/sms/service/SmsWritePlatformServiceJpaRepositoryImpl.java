@@ -59,6 +59,7 @@ public class SmsWritePlatformServiceJpaRepositoryImpl implements SmsWritePlatfor
             try {
 				frontlineSMSMessage.sendPostRequest();
 			} catch (IOException e) {
+				// TODO return some kind of messasge to user, letting them know why this has failed. 
 				return CommandProcessingResult.empty();
 			}
             
