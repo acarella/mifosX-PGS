@@ -28,6 +28,9 @@ import org.mifosplatform.infrastructure.core.exception.PlatformDataIntegrityExce
 import org.mifosplatform.infrastructure.security.service.PlatformSecurityContext;
 import org.mifosplatform.infrastructure.sms.domain.SmsMessage;
 import org.mifosplatform.infrastructure.sms.domain.SmsMessageRepository;
+import org.mifosplatform.infrastructure.smsgateway.domain.SmsGateway;
+import org.mifosplatform.infrastructure.smsgateway.domain.SmsGatewayRepository;
+import org.mifosplatform.infrastructure.smsgateway.domain.frontlinesms.FrontlineSMSMessage;
 import org.mifosplatform.organisation.office.domain.Office;
 import org.mifosplatform.organisation.office.domain.OfficeRepository;
 import org.mifosplatform.organisation.office.exception.OfficeNotFoundException;
@@ -96,6 +99,7 @@ public class PGSClientWritePlatformServiceJpaRepositoryImpl implements PGSClient
     private final ServiceAccountRepository serviceAccountRepository;
     private final ServiceOfferingRepository serviceOfferingRepository;
     private final SmsMessageRepository smsMessageRepository;
+    private final SmsGatewayRepository smsGatewayRepository;
     private String mifosPGSClientResponse;
     private String mifosPGSAccountResponse;
     private long mifosPGSClientId;
@@ -109,7 +113,7 @@ public class PGSClientWritePlatformServiceJpaRepositoryImpl implements PGSClient
             final SavingsAccountRepository savingsRepository, final SavingsProductRepository savingsProductRepository,
             final CommandProcessingService commandProcessingService, final CurrentAccountInformationRepository currentAccountInformationRepository,
             final ServiceAccountRepository serviceAccountRepository, final ServiceOfferingRepository serviceOfferingRepository, 
-            final SmsMessageRepository smsMessageRepository) {
+            final SmsMessageRepository smsMessageRepository, final SmsGatewayRepository smsGatewayRepository) {
         this.context = context;
         this.clientRepository = clientRepository;
         this.officeRepository = officeRepository;
@@ -126,6 +130,7 @@ public class PGSClientWritePlatformServiceJpaRepositoryImpl implements PGSClient
         this.serviceAccountRepository = serviceAccountRepository;
         this.serviceOfferingRepository = serviceOfferingRepository;
         this.smsMessageRepository = smsMessageRepository;
+        this.smsGatewayRepository = smsGatewayRepository;
     }
 
     @Transactional
@@ -316,10 +321,20 @@ public class PGSClientWritePlatformServiceJpaRepositoryImpl implements PGSClient
             String message = "Hello " + firstName + " welcome to PayGoSol solar payments services. Your "
             		+ "account number is " + newClient.getId().toString() + ".";
             
-            // TODO make this gatewayId dynamic
+            // TODO make this all dynamic
+            // TODO improve this code
             long gatewayId = 1;
             SmsMessage smsMessage = SmsMessage.pendingSms(newClient, staff, message, mobileNo, gatewayId);
+            final SmsGateway smsGateway = this.smsGatewayRepository.findOne(smsMessage.gatewayId());	
+            final FrontlineSMSMessage frontlineSMSMessage = new FrontlineSMSMessage(smsGateway.authToken(), smsMessage.message(), smsMessage.mobileNo(), smsGateway.url());
             this.smsMessageRepository.save(smsMessage);
+            
+            try {
+				frontlineSMSMessage.sendPostRequest();
+			} catch (IOException e) {
+				// TODO return some kind of messasge to user, letting them know why this has failed. 
+				return CommandProcessingResult.empty();
+			}
             
             return new CommandProcessingResultBuilder() //
                     .withCommandId(command.commandId()) //

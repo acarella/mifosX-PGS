@@ -9,9 +9,9 @@ CREATE TABLE `sms_messages_outbound` (
   `message` varchar(1000) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FKGROUP000000001` (`group_id`),
-  KEY `FKCLIENT00000001` (`client_id`),
+  KEY `FKCLIENT00000001` (`pgs_client_id`),
   CONSTRAINT `FKGROUP000000001` FOREIGN KEY (`group_id`) REFERENCES `m_group` (`id`),
-  CONSTRAINT `FKCLIENT00000001` FOREIGN KEY (`client_id`) REFERENCES `m_client` (`id`),
+  CONSTRAINT `FKCLIENT00000001` FOREIGN KEY (`pgs_client_id`) REFERENCES `m_pgsclient` (`id`),
   CONSTRAINT `FKSTAFF000000001` FOREIGN KEY (`staff_id`) REFERENCES `m_staff` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
